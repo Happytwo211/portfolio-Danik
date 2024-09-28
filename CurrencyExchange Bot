@@ -1,0 +1,91 @@
+
+import telebot, requests , json #imports
+
+TOKEN = ''
+bot = telebot.TeleBot(TOKEN) # bot TOKEN
+
+global dict1
+dict1 = {'Dirhams' : 'AED',
+         'Dollar' : 'USD',
+         'Euro': 'EUR',
+         'Rus. Rubles' : 'RUB'}
+
+class Bot:
+    @bot.message_handler(commands=['start', 'help'])
+    def handle_start(message):
+        bot.send_message(message.chat.id, f"Welcome, {message.chat.username}! This bot was made to convert currency fast and simple."
+                                      f" Type /commands to see available commands ")
+    @bot.message_handler(commands=['commands'])
+    def hanlde_commads(message):
+        bot.send_message(message.chat.id, 'Available commands : /values - to see available currencies to convert, /convert - to convert currencies')
+
+    @bot.message_handler(commands=['values'])
+    def hanlde_currency(message):
+        global dict_new1
+        dict_new = '\n'.join(dict1.keys())
+        dict_new1 = dict_new.join(dict1.values())
+        bot.send_message(message.chat.id, f" you can convert into: \n{dict_new1}")
+
+
+    @bot.message_handler(commands=['convert'])
+    def hanlde_currency(message):
+        bot.send_message(message.chat.id, "To convert currency, follow this typing style"
+                                      "<Currency you want to convert> <Amount of currency you want to convert> <The name of the currency in which to find out the price of the first currency> \n "
+                                      "Example: <RUB> <5000> <USD>")
+
+    global base_currnecy
+    global amount_base_currency
+    global convert_currency
+
+
+    @bot.message_handler(content_types=['text'])
+    def convert_currency1(message: telebot.types.Message):
+        base_currnecy, amount_base_currency , convert_currency = message.text.split(' ')
+        r = requests.get(f'https://api.currencyapi.com/v3/latest?apikey=cur_live_shsjK5JlUFFolKskxS0Z5H2ACcU1EXesdXsBDOz1&currencies={convert_currency}&base_currency={base_currnecy}')
+        j = json.loads(r.content)
+        print(j)
+        if convert_currency == "RUB":
+            one_value = j['data']['RUB']['value']
+            int_value = int(amount_base_currency)
+            sum_value = one_value * int_value
+            sum_value1 = str(sum_value)
+            sum_value2 = sum_value1[:8]
+            bot.send_message(message.chat.id, f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+        elif convert_currency == "USD":
+            one_value = j['data']['USD']['value']
+            int_value = int(amount_base_currency)
+            sum_value = one_value * int_value
+            sum_value1 = str(sum_value)
+            sum_value2 = sum_value1[:8]
+            bot.send_message(message.chat.id,
+                             f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+        elif convert_currency == "EUR":
+            one_value = j['data']['EUR']['value']
+            int_value = int(amount_base_currency)
+            sum_value = one_value * int_value
+            sum_value1 = str(sum_value)
+            sum_value2 = sum_value1[:8]
+            bot.send_message(message.chat.id,
+                             f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+        elif convert_currency == "AED":
+            one_value = j['data']['RUB']['value']
+            int_value = int(amount_base_currency)
+            sum_value = one_value * int_value
+            sum_value1 = str(sum_value)
+            sum_value2 = sum_value1[:8]
+            bot.send_message(message.chat.id,
+                             f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+
+class exeptions(Exception):
+    def currency_eror(base_currnecy, convert_currency):
+        if base_currnecy or convert_currency != "RUB"  or "EUR" or "AED" or "USD":
+            raise ValueError()
+
+    @bot.message_handler(content_types=['text'])
+    def error_message(message: telebot.types.Message):
+        bot.send_message(message.chat.id, "This bot can only convert this currencies:"
+                                          f"\n{dict_new1}")
+    
+bot.infinity_polling()
+
+
