@@ -1,10 +1,11 @@
 import telebot, requests, json
 
 
-TOKEN = 'TOKEN'
+TOKEN = '...'
 bot = telebot.TeleBot(TOKEN)
 
 global dict1
+
 dict1 = {'Dirhams' : 'AED',
          'Dollar' : 'USD',
          'Euro' : 'EUR',
@@ -14,7 +15,8 @@ str1 = "AED - Dirhams \n USD - Dollar \n EUR - Euro \n RUB - Rus. Rubles"
 
 
 
-class Bot:
+class Bot_Comads:
+
     @bot.message_handler(commands=['start', 'help'])
     def handle_start(message):
         bot.send_message(message.chat.id, f"Welcome, {message.chat.username}! This bot was made to convert currency fast and simple."
@@ -35,6 +37,8 @@ class Bot:
                                       "<Currency you want to convert> <Amount of currency you want to convert> <The name of the currency in which to find out the price of the first currency> \n"
                                       "Example: <RUB> <5000> <USD>")
 
+class ConvertLogic:
+
     global base_currnecy
     global amount_base_currency
     global convert_currency
@@ -43,77 +47,81 @@ class Bot:
     def convert_currency1(message: telebot.types.Message):
         base_currnecy, amount_base_currency, convert_currency = message.text.split(' ')
         r = requests.get(
-            f'api={convert_currency}&base_currency={base_currnecy}')
+            f'https://api.currencyapi.com/v3/latest?apikey=...&currencies={convert_currency}&base_currency={base_currnecy}')
         j = json.loads(r.content)
         print(j)
 
+
         while True:
 
-            try:
+                try:
 
-                if int(amount_base_currency) > 1000000000:
+                    if int(amount_base_currency) > 1000000000:
+                        bot.send_message(message.chat.id,
+                                         f'This is too much to count')
+                        break
+
+
+                    if convert_currency == "RUB":
+                        one_value = j['data']['RUB']['value']
+                        int_value = int(amount_base_currency)
+                        sum_value = one_value * int_value
+                        sum_value1 = str(sum_value)
+                        sum_value2 = sum_value1[:8]
+                        bot.send_message(message.chat.id,
+                                         f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+                        break
+
+                    elif convert_currency == "USD":
+                        one_value = j['data']['USD']['value']
+                        int_value = int(amount_base_currency)
+                        sum_value = one_value * int_value
+                        sum_value1 = str(sum_value)
+                        sum_value2 = sum_value1[:8]
+                        bot.send_message(message.chat.id,
+                                         f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+                        break
+
+                    elif convert_currency == "EUR":
+                        one_value = j['data']['EUR']['value']
+                        int_value = int(amount_base_currency)
+                        sum_value = one_value * int_value
+                        sum_value1 = str(sum_value)
+                        sum_value2 = sum_value1[:8]
+                        bot.send_message(message.chat.id,
+                                         f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+                        break
+
+                    elif convert_currency == "AED":
+                        one_value = j['data']['AED']['value']
+                        int_value = int(amount_base_currency)
+                        sum_value = one_value * int_value
+                        sum_value1 = str(sum_value)
+                        sum_value2 = sum_value1[:8]
+                        bot.send_message(message.chat.id,
+                                         f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
+                        break
+
+                    elif ['message']:
+                        bot.send_message(message.chat.id,
+                                         f'The selected currencies is invalid \n'
+                                         f'Bot can only convert this currencies: \n {str1}')
+                        break
+
+
+                except KeyError:
                     bot.send_message(message.chat.id,
-                                     f'This is too much to count')
+                                          f'The selected currencies is invalid \n'
+                                          f'Bot can only convert this currencies: \n {str1}')
                     break
-
-
-            
-                global one_value
-                if convert_currency == "RUB":
-                    one_value = j['data']['RUB']['value']
-                    int_value = int(amount_base_currency)
-                    sum_value = one_value * int_value
-                    sum_value1 = str(sum_value)
-                    sum_value2 = sum_value1[:8]
-                    bot.send_message(message.chat.id,
-                                     f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
-                    break
-
-                elif convert_currency == "USD":
-                    one_value = j['data']['USD']['value']
-                    int_value = int(amount_base_currency)
-                    sum_value = one_value * int_value
-                    sum_value1 = str(sum_value)
-                    sum_value2 = sum_value1[:8]
-                    bot.send_message(message.chat.id,
-                                     f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
-                    break
-
-                elif convert_currency == "EUR":
-                    one_value = j['data']['EUR']['value']
-                    int_value = int(amount_base_currency)
-                    sum_value = one_value * int_value
-                    sum_value1 = str(sum_value)
-                    sum_value2 = sum_value1[:8]
-                    bot.send_message(message.chat.id,
-                                     f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
-                    break
-
-                elif convert_currency == "AED":
-                    one_value = j['data']['AED']['value']
-                    int_value = int(amount_base_currency)
-                    sum_value = one_value * int_value
-                    sum_value1 = str(sum_value)
-                    sum_value2 = sum_value1[:8]
-                    bot.send_message(message.chat.id,
-                                     f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
-                    break
-
-                elif ['message']:
-                    bot.send_message(message.chat.id,
-                                     f'The selected currencies is invalid \n'
-                                     f'Bot can only convert this currencies: \n {str1}')
-                    break
-
-            except KeyError:
-                bot.send_message(message.chat.id,
-                                      f'The selected currencies is invalid \n'
-                                      f'Bot can only convert this currencies: \n {str1}')
-                break
+                #
+                # except ValueError as e:
+                #     bot.send_message(message.chat.id,
+                #                           f'{e} \n The selected currencies is invalid \n'
+                #                           f'Bot can only convert this currencies: \n {str1}')
+                #     break
 
 
 
 
 bot.infinity_polling()
-
-
