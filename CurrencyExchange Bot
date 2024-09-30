@@ -45,7 +45,7 @@ class Bot:
     def convert_currency1(message: telebot.types.Message):
         base_currnecy, amount_base_currency, convert_currency = message.text.split(' ')
         r = requests.get(
-            f'https://api.currencyapi.com/v3/latest?apikey=cur_live_shsjK5JlUFFolKskxS0Z5H2ACcU1EXesdXsBDOz1&currencies={convert_currency}&base_currency={base_currnecy}')
+            f'api'={convert_currency}&base_currency={base_currnecy}')
         j = json.loads(r.content)
         print(j)
 
