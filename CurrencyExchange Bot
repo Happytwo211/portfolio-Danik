@@ -50,11 +50,6 @@ class Bot:
             bot.send_message(message.chat.id,
                              f'This is too much to count')
 
-        if ['message']:
-            bot.send_message(message.chat.id,
-                             f'The selected currencies is invalid \n'
-                             f'Bot can only convert this currencies: \n {str1}')
-
         if convert_currency == "RUB":
             one_value = j['data']['RUB']['value']
             int_value = int(amount_base_currency)
@@ -88,7 +83,10 @@ class Bot:
             sum_value2 = sum_value1[:8]
             bot.send_message(message.chat.id,
                              f'{amount_base_currency} {base_currnecy} в {convert_currency} = {sum_value2}')
-
+          elif [message]:
+            bot.send_message(message.chat.id,
+                                 f'The selected currencies is invalid \n'
+                                 f'Bot can only convert this currencies: \n {str1}')
 
 
 bot.infinity_polling()
