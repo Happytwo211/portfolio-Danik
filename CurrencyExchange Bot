@@ -25,10 +25,7 @@ class Bot:
 
     @bot.message_handler(commands=['values'])
     def hanlde_currency(message):
-        global dict_new1
-        dict_new = '\n'.join(dict1.keys())
-        dict_new1 = dict_new.join(dict1.values())
-        bot.send_message(message.chat.id, f" you can convert into: \n {dict_new1}")
+        bot.send_message(message.chat.id, f" You can convert into: \n {str1}")
 
 
     @bot.message_handler(commands=['convert'])
