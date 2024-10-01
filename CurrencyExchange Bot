@@ -134,13 +134,7 @@ class ConvertLogic:
                                           f'The selected currencies is invalid \n'
                                           f'Bot can only convert this currencies: \n {str1}')
                     break
-                #
-                # except ValueError as e:
-                #     bot.send_message(message.chat.id,
-                #                           f'{e} \n The selected currencies is invalid \n'
-                #                           f'Bot can only convert this currencies: \n {str1}')
-                #     break
-
+                
 
 bot.infinity_polling()
 
