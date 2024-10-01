@@ -1,7 +1,7 @@
 import telebot, requests, json
 
 
-TOKEN = '...'
+TOKEN = '//TOKEN//'
 bot = telebot.TeleBot(TOKEN)
 
 global dict1
@@ -45,11 +45,31 @@ class ConvertLogic:
 
     @bot.message_handler(content_types=['text'])
     def convert_currency1(message: telebot.types.Message):
-        base_currnecy, amount_base_currency, convert_currency = message.text.split(' ')
-        r = requests.get(
-            f'https://api.currencyapi.com/v3/latest?apikey=...&currencies={convert_currency}&base_currency={base_currnecy}')
-        j = json.loads(r.content)
-        print(j)
+        try:
+            parts = message.text.split()
+            if len(parts) != 3:
+                raise ValueError("Incorrect input format")
+
+            base_currnecy, amount_base_currency, convert_currency = parts
+            r = requests.get(
+                f'https://api.currencyapi.com/v3/latest?apikey=//apikey//={convert_currency}&base_currency={base_currnecy}')
+            j = json.loads(r.content)
+
+        except ValueError as e:
+            if str(e) == "Incorrect input format":
+                bot.send_message(message.chat.id, f'Incorrect input format \n'
+                                                  f'Please use this format to type: \n'
+                                                  f'<Basic Currency> <Value> <Convert Currency>')
+
+
+        try:
+            if not amount_base_currency.isdigit():
+                raise ValueError("Incorrect input format")
+
+        except ValueError as e1:
+            if str(e1) == "Incorrect input format":
+                bot.send_message(message.chat.id, f'Use digit numbers to write amount of currency')
+
 
 
         while True:
@@ -122,6 +142,6 @@ class ConvertLogic:
                 #     break
 
 
-
-
 bot.infinity_polling()
+
+
