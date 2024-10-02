@@ -14,6 +14,24 @@ dict1 = {'Dirhams' : 'AED',
 str1 = "AED - Dirhams \n USD - Dollar \n EUR - Euro \n RUB - Rus. Rubles"
 
 
+class MessageTimeRestriction:
+    
+    global user_last_message_time
+    user_last_message_time = {}
+    @bot.message_handler(fucn=lambda message: True)
+    def handle_message(message):
+        user_id = message.from_user.id
+        current_time = time.time()
+    
+        if user_id in user_last_message_time:
+            last_message_time = user_last_message_time[user_id]
+    
+            if current_time - last_message_time < 5:
+                bot.send_message(message.chat.id, f'You sending message to fast!')
+                return
+    
+        user_last_message_time[user_id] = current_time
+
 
 class Bot_Comads:
 
