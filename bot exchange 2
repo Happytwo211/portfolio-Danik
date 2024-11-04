@@ -1,7 +1,7 @@
 import telebot, requests, json, time
 
 
-TOKEN = '7292473591:AAGdjxQX93lVP3RHxn24-Pg7jslSAF0b7tw'
+TOKEN = ''
 bot = telebot.TeleBot(TOKEN)
 
 dict1 = {'Dirhams' : 'AED',
